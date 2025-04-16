@@ -1,5 +1,8 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class Dipendente {
@@ -13,6 +16,10 @@ public class Dipendente {
         this.eta = eta;
         this.stipendio = stipendio;
         this.dipartimento = dipartimento;
+    }
+
+    public Dipendente(String nome){
+        this.nome = nome;
     }
 
     public String getNome() {
@@ -31,6 +38,11 @@ public class Dipendente {
         return dipartimento;
     }
 
+    public void infoDipendente() {
+        System.out.print("Nome: " + nome + ", età: " + eta + ", Stipendio: " + stipendio + ", Dipartimento: " + dipartimento + ".");
+        System.out.println();
+    }
+
     public static void main(String[] args) {
 
 
@@ -44,13 +56,35 @@ public class Dipendente {
                 new Dipendente("Luca", 38, 51000,Dipartimento.FINANCES)
         );
 
+        System.out.println("----------Lista Dipendenti con età maggiore o uguale a 30---------- ");
         List<Dipendente> dipOverTrenta = FiltroDip.filtra(dipendenti,filtroEta);
         for (Dipendente dip : dipOverTrenta) {
-            System.out.println(dip.getNome());
+            dip.infoDipendente();
         }
+
+        System.out.println("----------Lista Dipendenti con stipendio maggiore di 50000---------- ");
         List<Dipendente> dipStipAlto = FiltroDip.filtra(dipendenti,filtroStip);
         for (Dipendente dip : dipStipAlto) {
-            System.out.println(dip.getStipendio());
+            dip.infoDipendente();
         }
+
+        System.out.println("----------Lista Dipendenti ordinata per nome---------- ");
+        //Comparator<Dipendente> ordinaPerNome = (d1, d2) -> d1.getNome().compareToIgnoreCase(d2.getNome());
+        dipendenti.sort(Comparator.comparing(Dipendente::getNome));
+        for (Dipendente dip : dipendenti) {
+            dip.infoDipendente();
+        }
+
+        System.out.println("----------Lista Dipendenti creata da lista nomi---------- ");
+        List<String> nomi = Arrays.asList ("Anna","Marco","Flavio","Sara");
+        List<Dipendente> dipDaNomi = new ArrayList<>();
+        Function<String, Dipendente> creaDipendente = Dipendente::new;
+        for (String nome : nomi){
+            dipDaNomi.add(creaDipendente.apply(nome));
+        }
+        for (Dipendente dip : dipDaNomi) {
+            dip.infoDipendente();
+        }
+
     }
     }
